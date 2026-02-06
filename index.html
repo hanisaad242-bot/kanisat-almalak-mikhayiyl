@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سيستم إعداد خُدام كنيسة رئيس الملاك ميخائيل ببهتيم</title>
+    
+    <!-- Fonts: Cairo & Amiri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --color-navy: #0f172a; /* Deep Navy */
+            --color-navy-light: #1e293b;
+            --color-gold: #c5a059; /* Classic Church Gold */
+            --color-gold-hover: #b08d45;
+            --color-bg: #f8fafc;
+            --color-white: #ffffff;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--color-bg);
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Classic Theme Utilities */
+        .text-navy { color: var(--color-navy); }
+        .text-gold { color: var(--color-gold); }
+        .bg-navy { background-color: var(--color-navy); }
+        .bg-gold { background-color: var(--color-gold); }
+        .border-gold { border-color: var(--color-gold); }
+        
+        /* Card Design */
+        .classic-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-top: 4px solid var(--color-navy);
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .classic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Buttons */
+        .btn-classic {
+            background-color: var(--color-navy);
+            color: white;
+            border: 1px solid var(--color-navy);
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-classic:hover {
+            background-color: var(--color-navy-light);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+        }
+        .btn-gold {
+            background-color: var(--color-gold);
+            color: white;
+            border: 1px solid var(--color-gold);
+        }
+        .btn-gold:hover { background-color: var(--color-gold-hover); }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+        }
+        .btn-outline:hover {
+            border-color: var(--color-navy);
+            color: var(--color-navy);
+            background: #f8fafc;
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
+        .slide-up { animation: slideUp 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* Table Styling */
+        .styled-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .styled-table th {
+            background-color: #f8fafc;
+            color: var(--color-navy);
+            padding: 14px;
+            font-weight: 800;
+            text-align: right;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+        .styled-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            background: white;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+        }
+        .styled-table tr:hover td { background-color: #f8fafc; }
+        .styled-table tr:last-child td { border-bottom: none; }
+
+        /* Toast Notifications */
+        .toast-container { position: fixed; bottom: 20px; left: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); border-right: 5px solid; display: flex; align-items: center; gap: 12px; animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: auto; min-width: 300px; max-width: 400px; }
+        .toast-content h4 { font-weight: bold; font-size: 0.95rem; margin-bottom: 2px; }
+        .toast-content p { font-size: 0.85rem; color: #64748b; }
+        .toast.success { border-color: #22c55e; }
+        .toast.success i { color: #22c55e; }
+        .toast.error { border-color: #ef4444; }
+        .toast.error i { color: #ef4444; }
+        .toast.info { border-color: #3b82f6; }
+        .toast.info i { color: #3b82f6; }
+        @keyframes slideInRight { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutLeft { to { transform: translateX(-100%); opacity: 0; } }
+
+        /* Print Styles */
+        @media print {
+            @page { size: A4 portrait; margin: 2cm; }
+            body { background: white; color: black; -webkit-print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            
+            .print-container {
+                position: relative;
+                width: 100%;
+            }
+            .print-header {
+                text-align: center;
+                border-bottom: 3px double #000;
+                padding-bottom: 15px;
+                margin-bottom: 25px;
+            }
+            .print-header h1 { font-family: 'Amiri', serif; font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+            .print-meta { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin-top: 15px; }
+            
+            table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 20px; }
+            th, td { border: 1px solid #000 !important; padding: 8px; text-align: center; color: black !important; }
+            th { background-color: #f0f0f0 !important; font-weight: bold; }
+            
+            .print-footer {
+                margin-top: 50px;
+                display: flex;
+                justify-content: space-between;
+                font-family: 'Amiri', serif;
+                font-size: 16px;
+                padding-top: 20px;
+            }
+            /* Clean up UI elements */
+            .classic-card { box-shadow: none; border: none; }
+        }
+        .print-only { display: none; }
+
+        /* Status Indicators */
+        .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-left: 6px; }
+        .status-online { background-color: #22c55e; box-shadow: 0 0 6px #22c55e; }
+        .status-offline { background-color: #94a3b8; }
+
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-cairo">
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Navbar -->
+    <nav class="bg-navy text-white shadow-lg sticky top-0 z-50 no-print border-b-4 border-gold">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-navy shadow-inner border-2 border-gold relative">
+                    <i class="fas fa-church text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg md:text-xl leading-tight font-amiri text-gold">كنيسة الملاك ميخائيل ببهتيم</h1>
+                    <p class="text-xs text-gray-300">سيستم إعداد الخُدام</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSound()" id="sound-btn" class="text-gold hover:text-white transition p-2" title="الصوت">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                
+                <div id="auth-section" class="hidden flex items-center gap-3 border-r border-gray-600 pr-3">
+                    <div class="text-right hidden md:block">
+                        <span id="user-name" class="block font-bold text-sm text-gold"></span>
+                        <span id="user-role" class="text-xs text-gray-400"></span>
+                    </div>
+                    <button onclick="logout()" class="bg-red-600/80 hover:bg-red-700 text-white px-3 py-1.5 rounded text-sm transition shadow flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i> <span class="hidden md:inline">خروج</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-6 relative">
+        
+        <!-- Login View -->
+        <section id="login-view" class="fade-in max-w-md mx-auto mt-6">
+            <div class="classic-card p-8 border-t-4 border-gold">
+                <div class="text-center mb-8">
+                    <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-gold shadow-sm">
+                        <i class="fas fa-users text-5xl text-navy"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-navy font-amiri">أهلاً بك</h2>
+                    <p class="text-gray-500 text-sm mt-2">نظام إعداد الخُدام الإلكتروني</p>
+                </div>
+
+                <div class="flex bg-gray-100 p-1 rounded-lg mb-6">
+                    <button onclick="setAuthMode('admin')" id="btn-mode-admin" class="flex-1 py-2 rounded-md font-bold text-xs md:text-sm transition-all duration-300 bg-navy text-white shadow">
+                        <i class="fas fa-user-shield ml-2"></i>أدمن
+                    </button>
+                    <button onclick="setAuthMode('student-login')" id="btn-mode-student" class="flex-1 py-2 rounded-md font-bold text-xs md:text-sm transition-all duration-300 text-gray-500 hover:text-navy">
+                        <i class="fas fa-user-graduate ml-2"></i>دخول طالب
+                    </button>
+                    <button onclick="setAuthMode('student-signup')" id="btn-mode-signup" class="flex-1 py-2 rounded-md font-bold text-xs md:text-sm transition-all duration-300 text-gray-500 hover:text-navy">
+                        <i class="fas fa-user-plus ml-2"></i>تسجيل
+                    </button>
+                </div>
+
+                <!-- Admin Login Form -->
+                <form id="form-admin" onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-navy mb-1">اسم المستخدم</label>
+                        <input type="text" id="admin-user" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition" placeholder="admin">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-navy mb-1">كلمة المرور</label>
+                        <input type="password" id="admin-pass" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition" placeholder="••••••">
+                    </div>
+                    <button type="submit" class="w-full btn-classic py-3 rounded mt-2 ripple-btn">
+                        دخول الأدمن <i class="fas fa-arrow-left mr-2"></i>
+                    </button>
+                </form>
+
+                <!-- Student Login Form -->
+                <form id="form-student-login" onsubmit="handleStudentLogin(event)" class="space-y-4 hidden">
+                    <div class="bg-blue-50 border border-blue-200 p-3 rounded text-sm text-blue-800 mb-2">
+                        <i class="fas fa-info-circle ml-1"></i> يتم الدخول باسم المستخدم وكلمة المرور
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-navy mb-1">اسم المستخدم (Username)</label>
+                        <input type="text" id="login-username" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-gold transition" placeholder="username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-navy mb-1">كلمة المرور</label>
+                        <input type="password" id="login-password" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-gold transition" placeholder="••••••">
+                    </div>
+                    <button type="submit" class="w-full btn-classic py-3 rounded mt-2 ripple-btn">
+                        دخول الطالب <i class="fas fa-arrow-left mr-2"></i>
+                    </button>
+                </form>
+
+                <!-- Student Signup Form -->
+                <form id="form-student-signup" onsubmit="handleStudentSignup(event)" class="space-y-4 hidden">
+                    <div class="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm text-yellow-800 mb-2">
+                        <i class="fas fa-clock ml-1"></i> الحساب سيحتاج موافقة الأدمن بعد التسجيل
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-navy mb-1">الاسم الثلاثي</label>
+                        <input type="text" id="signup-name" required class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-gold transition" placeholder="مثال: مينا مجدي فوزي">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-navy mb-1">اختر اسم مستخدم (للأنجليزية)</label>
+                        <input type="text" id="signup-username" required class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-gold transition" placeholder="mina123">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-navy mb-1">كلمة المرور</label>
+                        <input type="password" id="signup-password" required class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-gold transition" placeholder="••••••">
+                    </div>
+                    <button type="submit" class="w-full btn-classic py-3 rounded mt-2 ripple-btn">
+                        إنشاء الحساب <i class="fas fa-check mr-2"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard -->
+        <section id="admin-dash" class="hidden space-y-6">
+            <!-- Tabs -->
+            <div class="flex flex-wrap gap-2 no-print bg-white p-2 rounded-xl shadow-sm border border-gray-200 sticky top-20 z-40">
+                <button onclick="adminTab('overview')" class="px-4 py-2 rounded-lg font-bold text-sm transition flex-1 md:flex-none bg-navy text-white" id="tab-overview"><i class="fas fa-chart-pie ml-2"></i>الرئيسية</button>
+                <button onclick="adminTab('students')" class="px-4 py-2 rounded-lg font-bold text-sm transition flex-1 md:flex-none text-navy hover:bg-gray-100 relative" id="tab-students">
+                    <i class="fas fa-users ml-2"></i>الطلاب
+                    <span id="pending-badge" class="hidden absolute top-1 left-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                </button>
+                <button onclick="adminTab('attendance')" class="px-4 py-2 rounded-lg font-bold text-sm transition flex-1 md:flex-none text-navy hover:bg-gray-100" id="tab-attendance"><i class="fas fa-calendar-check ml-2"></i>الحضور</button>
+                <button onclick="adminTab('content')" class="px-4 py-2 rounded-lg font-bold text-sm transition flex-1 md:flex-none text-navy hover:bg-gray-100" id="tab-content"><i class="fas fa-book ml-2"></i>الواجبات</button>
+                <button onclick="adminTab('submissions')" class="px-4 py-2 rounded-lg font-bold text-sm transition flex-1 md:flex-none text-navy hover:bg-gray-100 relative" id="tab-submissions">
+                    <i class="fas fa-inbox ml-2"></i>الوارد <span id="new-sub-badge" class="hidden w-2 h-2 bg-red-500 rounded-full absolute top-2 left-2 animate-pulse"></span>
+                </button>
+                <button onclick="adminTab('reports')" class="px-4 py-2 rounded-lg font-bold text-sm transition flex-1 md:flex-none text-navy hover:bg-gray-100" id="tab-reports"><i class="fas fa-print ml-2"></i>التقارير</button>
+            </div>
+
+            <!-- Tab: Overview -->
+            <div id="view-overview" class="admin-view slide-up">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="classic-card p-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold">إجمالي الطلاب</p>
+                            <h3 class="text-2xl font-bold text-navy" id="stat-total">0</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-navy"><i class="fas fa-user-graduate"></i></div>
+                    </div>
+                    <div class="classic-card p-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold">متصل الآن</p>
+                            <h3 class="text-2xl font-bold text-green-600" id="stat-online">0</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600"><i class="fas fa-wifi"></i></div>
+                    </div>
+                    <div class="classic-card p-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold">نسبة الحضور العامة</p>
+                            <h3 class="text-2xl font-bold text-gold" id="stat-att-rate">0%</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-600"><i class="fas fa-percentage"></i></div>
+                    </div>
+                    <div class="classic-card p-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold">متوسط الدرجات</p>
+                            <h3 class="text-2xl font-bold text-purple-600" id="stat-avg-grade">0%</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600"><i class="fas fa-chart-line"></i></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 classic-card p-6">
+                        <h3 class="font-bold text-navy mb-4 border-b pb-2 flex justify-between">
+                            <span><i class="fas fa-trophy text-gold ml-2"></i>أوائل الطلبة</span>
+                            <span class="text-xs text-gray-400 font-normal">يتم التحديث تلقائياً</span>
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-right text-sm">
+                                <thead class="text-gray-500 border-b">
+                                    <tr>
+                                        <th class="pb-2">الترتيب</th>
+                                        <th class="pb-2">الاسم</th>
+                                        <th class="pb-2">ID</th>
+                                        <th class="pb-2 text-center">الدرجة النهائية</th>
+                                        <th class="pb-2 text-center">التقييم</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="top-students-tbody">
+                                    <!-- Top 3 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="classic-card p-6">
+                        <h3 class="font-bold text-navy mb-4 border-b pb-2">إرسال تنبيه عام</h3>
+                        <div class="space-y-3">
+                            <textarea id="admin-broadcast" class="w-full border rounded p-2 text-sm h-24 focus:border-gold outline-none" placeholder="اكتب رسالة لتظهر لجميع الطلاب في لوحة تحكمهم..."></textarea>
+                            <button onclick="sendBroadcast()" class="w-full btn-classic py-2 rounded text-sm ripple-btn">
+                                <i class="fas fa-bullhorn ml-2"></i> نشر التنبيه
+                            </button>
+                            <div class="text-xs text-gray-400 mt-2">
+                                <i class="fas fa-info-circle"></i> الرسالة ستظهر كشريط تنبيه في حساب الطالب.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                    <div class="classic-card p-6">
+                        <h3 class="font-bold text-navy mb-4">توزيع الدرجات</h3>
+                        <div class="h-64"><canvas id="gradesChart"></canvas></div>
+                    </div>
+                    <div class="classic-card p-6">
+                         <h3 class="font-bold text-navy mb-4">سجل النشاط الحديث</h3>
+                         <ul id="activity-log" class="space-y-2 text-sm h-64 overflow-y-auto pr-2 custom-scrollbar">
+                             <!-- JS Populated -->
+                         </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Students -->
+            <div id="view-students" class="admin-view hidden slide-up">
+                <div class="classic-card p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                        <h3 class="text-xl font-bold text-navy">إدارة الطلاب والدرجات</h3>
+                        <div class="flex gap-2">
+                            <button onclick="generateStudents()" class="bg-navy text-white px-4 py-2 rounded text-sm hover:bg-blue-900 shadow transition transform hover:scale-105">
+                                <i class="fas fa-magic ml-2"></i> توليد 5 طلاب تجريبيين
+                            </button>
+                            <button onclick="deleteAllStudents()" class="bg-white text-red-600 border border-red-200 px-4 py-2 rounded text-sm hover:bg-red-50 hover:border-red-400 transition">
+                                <i class="fas fa-trash ml-2"></i> حذف الكل
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4 flex gap-2">
+                        <div class="relative w-full md:w-1/3">
+                            <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                            <input type="text" id="search-student" onkeyup="renderStudentTable()" placeholder="بحث بالاسم أو ID..." class="w-full border rounded p-2 pr-10 text-sm focus:outline-none focus:border-gold transition">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="styled-table text-right text-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-center w-10">حالة</th>
+                                    <th>الاسم</th>
+                                    <th>User</th>
+                                    <th>ID</th>
+                                    <th class="text-center">حساب</th>
+                                    <th class="text-center w-24">امتحان (15%)</th>
+                                    <th class="text-center">النهائي</th>
+                                    <th class="text-center">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-tbody">
+                                <!-- Generated Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Attendance -->
+            <div id="view-attendance" class="admin-view hidden slide-up">
+                <div class="classic-card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-navy">تسجيل الحضور والغياب</h3>
+                            <p class="text-sm text-gray-500 mt-1">فقط للحسابات المفعلة (Active)</p>
+                        </div>
+                        <div class="text-navy font-bold bg-blue-50 px-4 py-2 rounded border border-blue-100 flex items-center shadow-sm">
+                            <i class="far fa-calendar-alt ml-2 text-gold"></i>
+                            تاريخ اليوم: <span id="today-date" class="font-mono mr-2"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="styled-table text-center text-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-right">الاسم</th>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">الحالة الحالية</th>
+                                    <th class="text-center">إجراء</th>
+                                    <th class="text-center">نسبة الغياب</th>
+                                </tr>
+                            </thead>
+                            <tbody id="att-tbody">
+                                <!-- Generated Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Content (Homework) -->
+            <div id="view-content" class="admin-view hidden slide-up">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="classic-card p-6">
+                        <h3 class="font-bold text-navy text-lg mb-4 border-b pb-2"><i class="fas fa-plus-circle ml-2 text-green-600"></i>إضافة واجب جديد</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-bold text-navy mb-1">عنوان الواجب</label>
+                                <input type="text" id="hw-title" class="w-full border rounded p-2 focus:border-gold outline-none transition" placeholder="مثال: أهمية الصلاة">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-navy mb-1">نص السؤال / الواجب</label>
+                                <textarea id="hw-desc" rows="4" class="w-full border rounded p-2 focus:border-gold outline-none transition" placeholder="اكتب تفاصيل الواجب هنا..."></textarea>
+                            </div>
+                            <div class="bg-blue-50 p-3 rounded text-xs text-blue-800 border border-blue-100 flex items-start">
+                                <i class="fas fa-info-circle ml-2 mt-0.5"></i>
+                                <div>مدة الواجب 4 أيام تلقائياً من لحظة النشر، بعدها يختفي من عند الطالب.</div>
+                            </div>
+                            <button onclick="addHomework()" class="w-full btn-classic py-2 rounded ripple-btn shadow-md">
+                                <i class="fas fa-paper-plane ml-2"></i> نشر الواجب
+                            </button>
+                        </div>
+                    </div>
+                    <div class="classic-card p-6">
+                        <h3 class="font-bold text-navy text-lg mb-4 border-b pb-2"><i class="fas fa-history ml-2 text-gold"></i>سجل الواجبات</h3>
+                        <ul id="hw-list" class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar pr-2">
+                            <!-- JS Populated -->
+                            <li class="text-center text-gray-400 py-4">لا توجد واجبات مضافة</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Submissions -->
+            <div id="view-submissions" class="admin-view hidden slide-up">
+                <div class="classic-card p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-navy text-lg"><i class="fas fa-inbox ml-2 text-purple-600"></i>الوارد (واجبات ونوتة)</h3>
+                        <div class="flex gap-2 text-xs">
+                            <span class="px-2 py-1 bg-green-100 text-green-700 rounded border border-green-200 font-bold">واجب</span>
+                            <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded border border-purple-200 font-bold">نوتة</span>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto h-[600px] overflow-y-auto custom-scrollbar">
+                        <table class="styled-table text-sm text-right">
+                            <thead class="sticky top-0 z-10 shadow-sm">
+                                <tr>
+                                    <th class="w-24 text-center">النوع</th>
+                                    <th>الطالب</th>
+                                    <th>المحتوى / التفاصيل</th>
+                                    <th class="w-32 text-center">التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subs-tbody">
+                                <!-- Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Reports -->
+            <div id="view-reports" class="admin-view hidden slide-up">
+                <div class="classic-card p-8 text-center border-t-4 border-gold">
+                    <div class="w-16 h-16 bg-navy text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg ring-4 ring-gray-100">
+                        <i class="fas fa-print"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-navy mb-2">طباعة وتصدير التقارير</h3>
+                    <p class="text-gray-500 mb-8 max-w-md mx-auto">قم باختيار نوع التقرير المطلوب لاستخراجه بتنسيق A4 رسمي أو ملف Excel للأرشفة</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                        <button onclick="preparePrint('attendance')" class="p-6 border rounded-xl hover:bg-gray-50 transition group bg-white shadow-sm hover:shadow-md hover:border-navy">
+                            <i class="fas fa-list-alt text-3xl text-navy mb-3 group-hover:scale-110 transition-transform"></i>
+                            <h4 class="font-bold text-navy">تقرير الحضور والغياب (A4)</h4>
+                        </button>
+                        <button onclick="preparePrint('grades')" class="p-6 border rounded-xl hover:bg-gray-50 transition group bg-white shadow-sm hover:shadow-md hover:border-navy">
+                            <i class="fas fa-star text-3xl text-gold mb-3 group-hover:scale-110 transition-transform"></i>
+                            <h4 class="font-bold text-navy">تقرير الدرجات الشامل (A4)</h4>
+                        </button>
+                        <button onclick="exportExcel()" class="p-6 border rounded-xl hover:bg-gray-50 transition group bg-white shadow-sm hover:shadow-md hover:border-green-500">
+                            <i class="fas fa-file-excel text-3xl text-green-600 mb-3 group-hover:scale-110 transition-transform"></i>
+                            <h4 class="font-bold text-navy">تصدير Excel</h4>
+                        </button>
+                        <button onclick="exportPDF()" class="p-6 border rounded-xl hover:bg-gray-50 transition group bg-white shadow-sm hover:shadow-md hover:border-red-500">
+                            <i class="fas fa-file-pdf text-3xl text-red-600 mb-3 group-hover:scale-110 transition-transform"></i>
+                            <h4 class="font-bold text-navy">تصدير PDF</h4>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Student Dashboard -->
+        <section id="student-dash" class="hidden space-y-6 pb-20">
+            <!-- Broadcast Alert -->
+            <div id="student-broadcast" class="hidden bg-yellow-50 border-r-4 border-yellow-500 p-4 rounded shadow-sm flex items-start">
+                <i class="fas fa-bullhorn text-yellow-600 ml-3 mt-1"></i>
+                <div>
+                    <h4 class="font-bold text-navy text-sm">تنبيه عام</h4>
+                    <p class="text-sm text-gray-700 mt-1" id="student-broadcast-msg"></p>
+                </div>
+            </div>
+
+            <!-- Header Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="classic-card p-6 bg-gradient-to-br from-navy to-gray-800 text-white border-none relative overflow-hidden">
+                    <div class="relative z-10 flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-2xl border border-white/20">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 text-xs">أهلاً بك</p>
+                            <h2 class="text-xl font-bold font-amiri" id="stu-dash-name"></h2>
+                            <p class="text-xs font-mono text-gold mt-1" id="stu-dash-id"></p>
+                        </div>
+                    </div>
+                    <i class="fas fa-church absolute -bottom-4 -left-4 text-8xl text-white/5 z-0"></i>
+                </div>
+
+                <div class="classic-card p-6 flex flex-col justify-center">
+                    <p class="text-xs text-gray-500 font-bold mb-1">نسبة الحضور</p>
+                    <div class="flex items-end gap-2">
+                        <h3 class="text-3xl font-bold text-navy" id="stu-att-pct">0%</h3>
+                        <span class="text-sm text-gray-400 mb-1" id="stu-att-count">0 محاضرات</span>
+                    </div>
+                    <div class="w-full bg-gray-200 h-2 rounded-full mt-2 overflow-hidden">
+                        <div class="bg-green-500 h-full transition-all duration-1000" id="stu-att-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="classic-card p-6 flex flex-col justify-center">
+                    <p class="text-xs text-gray-500 font-bold mb-1">الدرجة الحالية</p>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-3xl font-bold text-gold" id="stu-grade-total">0%</h3>
+                        <div id="stu-stars" class="text-yellow-400 text-sm"></div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1" id="stu-grade-desc"></p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Homework Card -->
+                <div class="classic-card p-6 border-t-4 border-green-600">
+                    <h3 class="font-bold text-navy text-lg mb-4 flex items-center">
+                        <i class="fas fa-book-open ml-2 text-green-600"></i> الواجب الحالي
+                    </h3>
+                    
+                    <div id="stu-hw-container">
+                        <div id="stu-hw-active" class="hidden">
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-4">
+                                <h4 class="font-bold text-navy mb-1" id="stu-hw-title"></h4>
+                                <p class="text-sm text-gray-700 mb-3" id="stu-hw-desc"></p>
+                                <div class="text-xs font-bold text-red-500 flex items-center bg-white w-fit px-2 py-1 rounded border border-red-100">
+                                    <i class="far fa-clock ml-1"></i> متبقى: <span id="stu-hw-timer" class="mx-1"></span> يوم
+                                </div>
+                            </div>
+                            <textarea id="stu-hw-answer" class="w-full border rounded p-3 text-sm focus:border-green-500 outline-none h-32 mb-3" placeholder="اكتب إجابتك هنا..."></textarea>
+                            <button onclick="submitHomework()" class="w-full btn-classic bg-green-600 border-green-600 hover:bg-green-700 py-2 rounded ripple-btn shadow">
+                                <i class="fas fa-paper-plane ml-2"></i> إرسال الواجب
+                            </button>
+                        </div>
+                        <div id="stu-hw-empty" class="text-center py-8 text-gray-400">
+                            <i class="fas fa-check-circle text-4xl mb-3 text-gray-300"></i>
+                            <p>لا يوجد واجبات جديدة أو قمت بإرسال الحل</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spiritual Note Card -->
+                <div class="classic-card p-6 border-t-4 border-purple-600">
+                    <h3 class="font-bold text-navy text-lg mb-4 flex items-center">
+                        <i class="fas fa-praying-hands ml-2 text-purple-600"></i> النوتة الروحية اليومية
+                    </h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="border p-3 rounded-lg bg-gray-50">
+                            <p class="font-bold text-navy mb-2 border-b pb-1">الصلوات (الأجبية)</p>
+                            <div class="grid grid-cols-3 gap-y-2 gap-x-1">
+                                <label class="flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded p-1"><input type="checkbox" id="note-prime" class="accent-purple-600"> باكر</label>
+                                <label class="flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded p-1"><input type="checkbox" id="note-terce" class="accent-purple-600"> الثالثة</label>
+                                <label class="flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded p-1"><input type="checkbox" id="note-sext" class="accent-purple-600"> السادسة</label>
+                                <label class="flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded p-1"><input type="checkbox" id="note-none" class="accent-purple-600"> التاسعة</label>
+                                <label class="flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded p-1"><input type="checkbox" id="note-vespers" class="accent-purple-600"> الغروب</label>
+                                <label class="flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded p-1"><input type="checkbox" id="note-compline" class="accent-purple-600"> النوم</label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="border p-3 rounded-lg bg-gray-50">
+                                <p class="font-bold text-navy mb-2 border-b pb-1">حضور القداس</p>
+                                <div class="flex flex-col gap-1">
+                                    <label class="flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded p-1"><input type="checkbox" id="note-mass-sun" class="accent-purple-600"> الأحد</label>
+                                    <label class="flex items-center gap-1 cursor-pointer hover:bg-gray-100 rounded p-1"><input type="checkbox" id="note-mass-fri" class="accent-purple-600"> الجمعة</label>
+                                </div>
+                            </div>
+                            <div class="border p-3 rounded-lg bg-gray-50">
+                                <p class="font-bold text-navy mb-2 border-b pb-1">الاعتراف</p>
+                                <select id="note-confess" class="w-full text-xs p-1.5 rounded border focus:border-purple-500 outline-none bg-white">
+                                    <option value="">اختر الأب الكاهن</option>
+                                    <option>أبونا ميرون</option>
+                                    <option>أبونا مايكل</option>
+                                    <option>أبونا مارتيروس</option>
+                                    <option>أبونا يسطس</option>
+                                    <option>أبونا تيموثاوس</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <textarea id="note-remarks" class="w-full border rounded p-2 text-xs h-16 focus:border-purple-500 outline-none" placeholder="ملاحظات روحية إضافية..."></textarea>
+                        
+                        <button onclick="submitNote()" class="w-full btn-classic bg-purple-600 border-purple-600 hover:bg-purple-700 py-2 rounded ripple-btn shadow">
+                            <i class="fas fa-save ml-2"></i> حفظ النوتة
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Printable Area (Hidden in screen) -->
+        <div id="print-area" class="print-only">
+            <div class="print-container">
+                <div class="print-header">
+                    <h1>إعداد خُدام كنيسة رئيس الملاك ميخائيل ببهتيم</h1>
+                    <div class="print-meta">
+                        <span id="p-date"></span>
+                        <span id="p-day"></span>
+                    </div>
+                </div>
+                <h2 id="p-title" class="text-center text-xl font-bold my-4 border-b-2 border-black inline-block pb-1"></h2>
+                <div id="p-content"></div>
+                <div class="print-footer">
+                    <div>توقيع المشرف: .............................</div>
+                    <div>الختم: .............................</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-navy-light text-white text-center py-4 text-xs no-print mt-auto border-t border-gray-700">
+        <p>&copy; 2023 كنيسة رئيس الملاك ميخائيل ببهتيم - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // --- DATA & STATE ---
+        let students = JSON.parse(localStorage.getItem('sys_students')) || [];
+        let homeworks = JSON.parse(localStorage.getItem('sys_homeworks')) || [];
+        let activityLog = JSON.parse(localStorage.getItem('sys_logs')) || [];
+        let broadcastMsg = localStorage.getItem('sys_broadcast') || "";
+        let currentUser = null;
+        let isMuted = false;
+        
+        const TOTAL_LECTURES = 20; 
+        const BASE_ID = 20230000001;
+
+        // --- SOUND ENGINE ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, dur) {
+            if (isMuted) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + dur);
+        }
+        
+        function playSound(e) {
+            switch(e) {
+                case 'login': playTone(600, 'sine', 0.4); setTimeout(()=>playTone(900, 'sine', 0.4), 100); break;
+                case 'click': playTone(400, 'triangle', 0.05); break;
+                case 'success': playTone(800, 'sine', 0.1); setTimeout(()=>playTone(1200, 'triangle', 0.3), 100); break;
+                case 'error': playTone(150, 'sawtooth', 0.4); break;
+            }
+        }
+        function toggleSound() {
+            isMuted = !isMuted;
+            document.getElementById('sound-btn').innerHTML = isMuted ? '<i class="fas fa-volume-mute text-red-400"></i>' : '<i class="fas fa-volume-up text-gold"></i>';
+            showToast(isMuted ? 'تم كتم الصوت' : 'تم تشغيل الصوت', 'info');
+        }
+
+        // --- TOAST SYSTEM ---
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = 'check-circle';
+            if(type === 'error') icon = 'exclamation-circle';
+            if(type === 'info') icon = 'info-circle';
+            
+            toast.innerHTML = `
+                <i class="fas fa-${icon} text-xl"></i>
+                <div class="toast-content">
+                    <h4>${type === 'error' ? 'خطأ' : type === 'info' ? 'تنبيه' : 'نجاح'}</h4>
+                    <p>${msg}</p>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Remove after 3s
+            setTimeout(() => {
+                toast.style.animation = 'slideOutLeft 0.4s ease-in forwards';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // --- AUTH ---
+        function setAuthMode(mode) {
+            playSound('click');
+            // Reset styles
+            ['admin', 'student', 'signup'].forEach(m => {
+                const btn = document.getElementById(`btn-mode-${m === 'student' ? 'student' : m === 'signup' ? 'signup' : 'admin'}`);
+                if(btn) {
+                    btn.classList.remove('bg-navy', 'text-white');
+                    btn.classList.add('text-gray-500', 'hover:text-navy');
+                }
+            });
+
+            // Activate button
+            const activeBtn = document.getElementById(`btn-mode-${mode === 'student-login' ? 'student' : mode === 'student-signup' ? 'signup' : 'admin'}`);
+            activeBtn.classList.remove('text-gray-500', 'hover:text-navy');
+            activeBtn.classList.add('bg-navy', 'text-white');
+
+            // Toggle Forms
+            document.getElementById('form-admin').classList.add('hidden');
+            document.getElementById('form-student-login').classList.add('hidden');
+            document.getElementById('form-student-signup').classList.add('hidden');
+
+            if(mode === 'admin') document.getElementById('form-admin').classList.remove('hidden');
+            else if(mode === 'student-login') document.getElementById('form-student-login').classList.remove('hidden');
+            else document.getElementById('form-student-signup').classList.remove('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+            if(u === 'admin' && p === 'admin') {
+                playSound('login');
+                currentUser = { role: 'admin', name: 'الخادم المسؤول' };
+                initAdmin();
+                showToast('تم تسجيل الدخول بنجاح');
+            } else {
+                playSound('error');
+                showToast('خطأ في اسم المستخدم أو كلمة المرور', 'error');
+            }
+        }
+
+        function handleStudentLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-username').value.trim();
+            const p = document.getElementById('login-password').value.trim();
+            
+            const student = students.find(s => s.username === u && s.password === p);
+            
+            if(student) {
+                if(student.status === 'pending') {
+                    playSound('error');
+                    showToast('الحساب في انتظار موافقة الأدمن', 'info');
+                    return;
+                }
+                
+                playSound('login');
+                currentUser = { role: 'student', ...student };
+                // Set Online
+                const idx = students.findIndex(s => s.id == student.id);
+                students[idx].isOnline = true;
+                students[idx].lastSeen = new Date().toISOString();
+                saveData();
+                logActivity(`دخول الطالب ${student.name}`);
+                initStudent();
+                showToast(`مرحباً ${student.name}`);
+            } else {
+                playSound('error');
+                showToast('بيانات الدخول غير صحيحة', 'error');
+            }
+        }
+
+        function handleStudentSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const user = document.getElementById('signup-username').value.trim();
+            const pass = document.getElementById('signup-password').value.trim();
+
+            if(!name || !user || !pass) return showToast('يرجى ملء جميع البيانات', 'error');
+            if(students.some(s => s.username === user)) return showToast('اسم المستخدم مأخوذ من قبل', 'error');
+
+            const newId = (BASE_ID + students.length + Math.floor(Math.random()*100)).toString();
+
+            const newStudent = {
+                id: newId,
+                name: name,
+                username: user,
+                password: pass,
+                status: 'pending', // Pending Approval
+                attendance: [],
+                examScore: 0,
+                submissions: [],
+                isOnline: false,
+                lastSeen: null
+            };
+
+            students.push(newStudent);
+            saveData();
+            playSound('success');
+            showToast('تم إنشاء الحساب بنجاح! في انتظار موافقة الأدمن', 'info');
+            logActivity(`تسجيل حساب جديد: ${name}`);
+            
+            // Reset and switch to login
+            document.getElementById('form-student-signup').reset();
+            setAuthMode('student-login');
+        }
+
+        function logout() {
+            playSound('click');
+            if(currentUser && currentUser.role === 'student') {
+                const idx = students.findIndex(s => s.id == currentUser.id);
+                if(idx > -1) { students[idx].isOnline = false; saveData(); }
+            }
+            currentUser = null;
+            location.reload();
+        }
+
+        // --- ADMIN FEATURES ---
+        function initAdmin() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('admin-dash').classList.remove('hidden');
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('user-name').innerText = currentUser.name;
+            document.getElementById('user-role').innerText = 'Admin';
+            
+            document.getElementById('today-date').innerText = new Date().toLocaleDateString('ar-EG');
+            
+            // Load broadcast
+            document.getElementById('admin-broadcast').value = broadcastMsg;
+
+            updateStats();
+            renderChart();
+        }
+
+        function adminTab(tab) {
+            playSound('click');
+            // Hide all
+            document.querySelectorAll('.admin-view').forEach(el => el.classList.add('hidden'));
+            // Reset buttons
+            document.querySelectorAll('#admin-dash button[id^="tab-"]').forEach(btn => {
+                btn.classList.remove('bg-navy', 'text-white');
+                btn.classList.add('text-navy', 'hover:bg-gray-100');
+            });
+            // Show active
+            document.getElementById('view-' + tab).classList.remove('hidden');
+            const btn = document.getElementById('tab-' + tab);
+            btn.classList.remove('text-navy', 'hover:bg-gray-100');
+            btn.classList.add('bg-navy', 'text-white');
+
+            if(tab === 'overview') { updateStats(); renderChart(); }
+            if(tab === 'students') renderStudentTable();
+            if(tab === 'attendance') renderAttendanceTable();
+            if(tab === 'content') renderHomeworkList();
+            if(tab === 'submissions') renderSubmissions();
+        }
+
+        // 1. Generate Students (Demo Data)
+        function generateStudents() {
+            const fNames = ["مينا", "كيرلس", "بيشوي", "أبانوب", "مارك", "يوسف"];
+            const lNames = ["عادل", "ناجي", "سمير", "هاني", "ملاك", "ثروت"];
+            
+            for(let i=0; i<5; i++) {
+                let name = fNames[i % fNames.length] + " " + lNames[Math.floor(Math.random()*lNames.length)];
+                let user = "user" + (students.length + 1);
+                students.push({
+                    id: (BASE_ID + students.length + 100).toString(),
+                    name: name,
+                    username: user,
+                    password: "123",
+                    status: 'active',
+                    attendance: [],
+                    examScore: 0,
+                    submissions: [], 
+                    isOnline: false,
+                    lastSeen: null
+                });
+            }
+            saveData();
+            playSound('success');
+            showToast('تم توليد 5 طلاب تجريبيين');
+            renderStudentTable();
+            updateStats();
+        }
+
+        function deleteAllStudents() {
+            if(confirm('هل أنت متأكد من حذف جميع الطلاب؟')) {
+                students = [];
+                homeworks = [];
+                saveData();
+                renderStudentTable();
+                updateStats();
+                showToast('تم حذف جميع البيانات', 'info');
+            }
+        }
+
+        // 2. Grading Logic
+        function calculateGrade(s) {
+            // 60% Attendance
+            const attScore = (s.attendance.length / TOTAL_LECTURES) * 60;
+            // 25% Work (HW + Notes). Target: 10 items
+            const works = s.submissions.length;
+            const workScore = Math.min(25, (works / 10) * 25);
+            // 15% Exam
+            const examScore = (s.examScore / 100) * 15;
+            
+            return Math.round(attScore + workScore + examScore);
+        }
+
+        function getGradeColor(g) {
+            if(g >= 85) return 'text-green-600';
+            if(g >= 70) return 'text-blue-600';
+            if(g >= 50) return 'text-yellow-600';
+            return 'text-red-600';
+        }
+
+        // 3. Render Students
+        function renderStudentTable() {
+            const tbody = document.getElementById('students-tbody');
+            const search = document.getElementById('search-student').value.toLowerCase();
+            tbody.innerHTML = '';
+            
+            // Check for pending students to show badge
+            const pendingCount = students.filter(s => s.status === 'pending').length;
+            const badge = document.getElementById('pending-badge');
+            if(pendingCount > 0) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+
+            students.forEach(s => {
+                if(s.name.includes(search) || s.id.includes(search)) {
+                    const final = calculateGrade(s);
+                    
+                    const isPending = s.status === 'pending';
+                    const statusClass = isPending ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700';
+                    const statusText = isPending ? 'قيد الانتظار' : 'نشط';
+                    const statusIcon = isPending ? 'fa-clock' : 'fa-check';
+
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-gray-50 transition";
+                    tr.innerHTML = `
+                        <td class="text-center"><span class="status-dot ${s.isOnline ? 'status-online' : 'status-offline'}" title="${s.isOnline?'Online':'Offline'}"></span></td>
+                        <td class="font-bold text-navy">${s.name}</td>
+                        <td class="text-xs text-gray-500">${s.username}</td>
+                        <td class="font-mono text-gray-500 text-xs">${s.id}</td>
+                        <td class="text-center">
+                            <button onclick="toggleStudentStatus('${s.id}')" class="px-2 py-1 rounded text-xs font-bold ${statusClass} transition hover:scale-105">
+                                <i class="fas ${statusIcon} ml-1"></i> ${statusText}
+                            </button>
+                        </td>
+                        <td class="p-1"><input type="number" max="100" min="0" value="${s.examScore}" onchange="updateExam('${s.id}', this.value)" class="w-full text-center border rounded p-1 text-xs focus:border-gold outline-none" ${isPending?'disabled':''}></td>
+                        <td class="text-center font-bold text-lg ${getGradeColor(final)}">${final}%</td>
+                        <td class="text-center">
+                            <button onclick="deleteStudent('${s.id}')" class="text-red-500 hover:bg-red-50 p-1 rounded transition"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            });
+        }
+
+        function toggleStudentStatus(id) {
+            const idx = students.findIndex(s => s.id == id);
+            if(idx > -1) {
+                if(students[idx].status === 'pending') {
+                    students[idx].status = 'active';
+                    playSound('success');
+                    showToast(`تم تفعيل حساب الطالب ${students[idx].name}`);
+                } else {
+                    students[idx].status = 'pending';
+                    showToast(`تم تعطيل حساب الطالب ${students[idx].name}`, 'info');
+                }
+                saveData();
+                renderStudentTable();
+            }
+        }
+
+        function updateExam(id, val) {
+            const idx = students.findIndex(s => s.id == id);
+            if(idx > -1) {
+                students[idx].examScore = parseInt(val) || 0;
+                saveData();
+                renderStudentTable();
+                playSound('success');
+            }
+        }
+        function deleteStudent(id) {
+            if(confirm('حذف هذا الطالب؟')) {
+                students = students.filter(s => s.id != id);
+                saveData();
+                renderStudentTable();
+                showToast('تم حذف الطالب', 'info');
+            }
+        }
+
+        // 4. Attendance
+        function renderAttendanceTable() {
+            const tbody = document.getElementById('att-tbody');
+            tbody.innerHTML = '';
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Only Active Students
+            students.filter(s => s.status === 'active').forEach(s => {
+                const isHere = s.attendance.includes(today);
+                const absRate = Math.round(((TOTAL_LECTURES - s.attendance.length) / TOTAL_LECTURES) * 100);
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-right font-bold">${s.name}</td>
+                    <td class="font-mono text-xs">${s.id}</td>
+                    <td>
+                        <span class="px-2 py-1 rounded text-xs font-bold transition-all duration-300 ${isHere ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                            ${isHere ? '✔ حاضر' : '✖ غائب'}
+                        </span>
+                    </td>
+                    <td>
+                        <button onclick="toggleAtt('${s.id}')" class="btn-outline px-3 py-1 rounded text-xs font-bold transition hover:bg-navy hover:text-white">
+                            تغيير الحالة
+                        </button>
+                    </td>
+                    <td class="text-gray-500 font-bold ${absRate>25?'text-red-500':''}">${absRate}%</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        function toggleAtt(id) {
+            const idx = students.findIndex(s => s.id == id);
+            const today = new Date().toISOString().split('T')[0];
+            if(students[idx].attendance.includes(today)) {
+                students[idx].attendance = students[idx].attendance.filter(d => d !== today);
+            } else {
+                students[idx].attendance.push(today);
+                playSound('success');
+            }
+            saveData();
+            renderAttendanceTable();
+        }
+
+        // 5. Broadcast
+        function sendBroadcast() {
+            const msg = document.getElementById('admin-broadcast').value;
+            broadcastMsg = msg;
+            localStorage.setItem('sys_broadcast', msg);
+            playSound('success');
+            showToast('تم نشر التنبيه العام بنجاح');
+            logActivity('تحديث التنبيه العام');
+        }
+
+        // 6. Content & Homework
+        function addHomework() {
+            const title = document.getElementById('hw-title').value;
+            const desc = document.getElementById('hw-desc').value;
+            if(!title || !desc) return showToast('يرجى إدخال العنوان والنص', 'error');
+            
+            const hw = {
+                id: Date.now(),
+                title, desc,
+                created: new Date().toISOString(),
+                expiry: new Date(Date.now() + 4*24*60*60*1000).toISOString()
+            };
+            homeworks.push(hw);
+            saveData();
+            playSound('success');
+            logActivity(`إضافة واجب جديد: ${title}`);
+            showToast('تم نشر الواجب بنجاح');
+            document.getElementById('hw-title').value = '';
+            document.getElementById('hw-desc').value = '';
+            renderHomeworkList();
+        }
+        function renderHomeworkList() {
+            const list = document.getElementById('hw-list');
+            list.innerHTML = '';
+            homeworks.sort((a,b) => new Date(b.created) - new Date(a.created)).forEach(h => {
+                const exp = new Date(h.expiry);
+                const isActive = exp > new Date();
+                const li = document.createElement('li');
+                li.className = `p-3 border rounded ${isActive ? 'bg-white border-l-4 border-l-green-500 shadow-sm' : 'bg-gray-100 opacity-70'}`;
+                li.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-navy">${h.title}</span>
+                        <span class="px-2 py-0.5 rounded text-xs ${isActive?'bg-green-100 text-green-700':'bg-red-100 text-red-500'} font-bold">${isActive?'نشط':'منتهي'}</span>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1 flex justify-between">
+                        <span>${h.desc.substring(0,40)}...</span>
+                        <span>ينتهي: ${exp.toLocaleDateString('ar-EG')}</span>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        // 7. Submissions View
+        function renderSubmissions() {
+            const tbody = document.getElementById('subs-tbody');
+            tbody.innerHTML = '';
+            
+            let allSubs = [];
+            students.forEach(s => {
+                s.submissions.forEach(sub => {
+                    allSubs.push({ ...sub, studentName: s.name });
+                });
+            });
+            
+            // Sort by date desc
+            allSubs.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            allSubs.forEach(sub => {
+                const tr = document.createElement('tr');
+                const isHW = sub.type === 'homework';
+                tr.innerHTML = `
+                    <td class="text-right">
+                        <span class="px-2 py-1 rounded text-xs font-bold ${isHW ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700'}">
+                            ${isHW ? 'واجب' : 'نوتة'}
+                        </span>
+                    </td>
+                    <td class="font-bold text-navy">${sub.studentName}</td>
+                    <td class="text-gray-700 text-xs">
+                        ${isHW ? `<b>${sub.title}</b>: ${sub.answer.substring(0, 60)}...` : `<b>القداس:</b> ${sub.massSun?'الأحد ':''}${sub.massFri?'الجمعة':''} | <b>أب:</b> ${sub.confess}`}
+                    </td>
+                    <td class="text-gray-400 text-xs font-mono text-center">${new Date(sub.date).toLocaleDateString('ar-EG')}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 8. Stats, Charts & Leaderboard
+        function updateStats() {
+            document.getElementById('stat-total').innerText = students.length;
+            document.getElementById('stat-online').innerText = students.filter(s => s.isOnline).length;
+            
+            let totalAtt = 0;
+            let totalGrade = 0;
+            const activeStudents = students.filter(s => s.status === 'active');
+            
+            activeStudents.forEach(s => {
+                totalAtt += s.attendance.length;
+                totalGrade += calculateGrade(s);
+            });
+            const rate = activeStudents.length ? Math.round((totalAtt / (activeStudents.length * TOTAL_LECTURES)) * 100) : 0;
+            const avg = activeStudents.length ? Math.round(totalGrade / activeStudents.length) : 0;
+
+            document.getElementById('stat-att-rate').innerText = rate + '%';
+            document.getElementById('stat-avg-grade').innerText = avg + '%';
+            
+            // Pending Subs
+            let pending = 0;
+            const yesterday = new Date(Date.now() - 86400000);
+            activeStudents.forEach(s => pending += s.submissions.filter(sub => new Date(sub.date) > yesterday).length);
+            if(pending > 0) document.getElementById('new-sub-badge').classList.remove('hidden');
+
+            renderActivityLog();
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            const tbody = document.getElementById('top-students-tbody');
+            tbody.innerHTML = '';
+            
+            // Sort active students by grade desc
+            const sorted = students.filter(s=>s.status === 'active').sort((a, b) => calculateGrade(b) - calculateGrade(a));
+            const top3 = sorted.slice(0, 3);
+            
+            top3.forEach((s, i) => {
+                if(calculateGrade(s) === 0) return; // Don't show zero grades
+                const tr = document.createElement('tr');
+                const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉';
+                tr.className = "border-b last:border-0";
+                tr.innerHTML = `
+                    <td class="py-2 text-xl">${medal}</td>
+                    <td class="font-bold text-navy">${s.name}</td>
+                    <td class="text-xs text-gray-500 font-mono">${s.id}</td>
+                    <td class="text-center font-bold text-green-600">${calculateGrade(s)}%</td>
+                    <td class="text-center text-xs text-gold"><i class="fas fa-star"></i> الممتاز</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            if(tbody.innerHTML === '') {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-2 text-xs">لا توجد بيانات كافية</td></tr>';
+            }
+        }
+
+        function logActivity(msg) {
+            activityLog.unshift({ msg, date: new Date().toISOString() });
+            if(activityLog.length > 50) activityLog.pop();
+            saveData();
+            renderActivityLog();
+        }
+        function renderActivityLog() {
+            const ul = document.getElementById('activity-log');
+            if(!ul) return;
+            ul.innerHTML = '';
+            activityLog.forEach(log => {
+                const li = document.createElement('li');
+                li.className = "flex justify-between border-b border-gray-100 pb-1 items-center";
+                li.innerHTML = `<span class="text-gray-700">${log.msg}</span><span class="text-xs text-gray-400 font-mono">${new Date(log.date).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</span>`;
+                ul.appendChild(li);
+            });
+        }
+        
+        let chartInstance = null;
+        function renderChart() {
+            const ctx = document.getElementById('gradesChart');
+            if(!ctx) return;
+            
+            let grades = [0, 0, 0, 0]; // <50, 50-70, 70-85, >85
+            students.filter(s => s.status === 'active').forEach(s => {
+                const g = calculateGrade(s);
+                if(g < 50) grades[0]++;
+                else if(g < 70) grades[1]++;
+                else if(g < 85) grades[2]++;
+                else grades[3]++;
+            });
+
+            if(chartInstance) chartInstance.destroy();
+            
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ضعيف (<50)', 'مقبول/جيد', 'جيد جداً', 'ممتاز (>85)'],
+                    datasets: [{
+                        label: 'عدد الطلاب',
+                        data: grades,
+                        backgroundColor: ['#ef4444', '#eab308', '#3b82f6', '#22c55e'],
+                        borderRadius: 6,
+                        barThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            });
+        }
+
+        // --- STUDENT FEATURES ---
+        function initStudent() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('student-dash').classList.remove('hidden');
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('user-name').innerText = currentUser.name;
+            document.getElementById('user-role').innerText = 'Student';
+
+            document.getElementById('stu-dash-name').innerText = currentUser.name;
+            document.getElementById('stu-dash-id').innerText = currentUser.id;
+            
+            // Broadcast
+            if(broadcastMsg && broadcastMsg.trim() !== "") {
+                document.getElementById('student-broadcast').classList.remove('hidden');
+                document.getElementById('student-broadcast-msg').innerText = broadcastMsg;
+            }
+
+            // Stats
+            const attCount = currentUser.attendance.length;
+            const pct = Math.round((attCount / TOTAL_LECTURES) * 100);
+            document.getElementById('stu-att-pct').innerText = pct + '%';
+            document.getElementById('stu-att-count').innerText = `${attCount} من ${TOTAL_LECTURES}`;
+            setTimeout(() => document.getElementById('stu-att-bar').style.width = pct + '%', 500);
+            
+            const grade = calculateGrade(currentUser);
+            document.getElementById('stu-grade-total').innerText = grade + '%';
+            
+            // Stars & Desc
+            let starsHTML = '';
+            let gradeDesc = 'يحتاج تحسين';
+            if(grade >= 50) { starsHTML = '<i class="fas fa-star"></i>'; gradeDesc = 'مستوى مقبول'; }
+            if(grade >= 70) { starsHTML = '<i class="fas fa-star"></i><i class="fas fa-star"></i>'; gradeDesc = 'مستوى جيد'; }
+            if(grade >= 85) { starsHTML = '<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>'; gradeDesc = 'مستوى ممتاز'; }
+            document.getElementById('stu-stars').innerHTML = starsHTML;
+            document.getElementById('stu-grade-desc').innerText = gradeDesc;
+
+            // Check Homework
+            const now = new Date();
+            const activeHw = homeworks.find(h => new Date(h.expiry) > now);
+            
+            if(activeHw) {
+                // Check if already done
+                const done = currentUser.submissions.some(s => s.type === 'homework' && s.hwId === activeHw.id);
+                if(done) {
+                    document.getElementById('stu-hw-active').classList.add('hidden');
+                    document.getElementById('stu-hw-empty').classList.remove('hidden');
+                    document.getElementById('stu-hw-empty').innerHTML = `<i class="fas fa-check-circle text-4xl mb-3 text-green-500"></i><p>تم تسليم الواجب بنجاح</p>`;
+                } else {
+                    document.getElementById('stu-hw-empty').classList.add('hidden');
+                    document.getElementById('stu-hw-active').classList.remove('hidden');
+                    document.getElementById('stu-hw-title').innerText = activeHw.title;
+                    document.getElementById('stu-hw-desc').innerText = activeHw.desc;
+                    document.getElementById('stu-hw-active').dataset.hwId = activeHw.id;
+                    const days = Math.ceil((new Date(activeHw.expiry) - now)/(1000*60*60*24));
+                    document.getElementById('stu-hw-timer').innerText = days;
+                }
+            } else {
+                document.getElementById('stu-hw-active').classList.add('hidden');
+                document.getElementById('stu-hw-empty').classList.remove('hidden');
+                document.getElementById('stu-hw-empty').innerHTML = `<i class="fas fa-smile text-4xl mb-3 text-gray-300"></i><p>لا يوجد واجبات جديدة حالياً</p>`;
+            }
+        }
+
+        function submitHomework() {
+            const ans = document.getElementById('stu-hw-answer').value;
+            const hwId = document.getElementById('stu-hw-active').dataset.hwId;
+            if(!ans) return showToast('يرجى كتابة الإجابة', 'error');
+            
+            const hw = homeworks.find(h => h.id == hwId);
+            
+            // Update Student
+            const idx = students.findIndex(s => s.id == currentUser.id);
+            students[idx].submissions.push({
+                type: 'homework',
+                hwId: parseInt(hwId),
+                title: hw.title,
+                answer: ans,
+                date: new Date().toISOString()
+            });
+            saveData();
+            currentUser = students[idx]; // refresh local
+            playSound('success');
+            logActivity(`قام الطالب ${currentUser.name} بحل الواجب: ${hw.title}`);
+            showToast('تم إرسال الواجب بنجاح');
+            initStudent(); // refresh UI
+        }
+
+        function submitNote() {
+            const note = {
+                type: 'note',
+                date: new Date().toISOString(),
+                massSun: document.getElementById('note-mass-sun').checked,
+                massFri: document.getElementById('note-mass-fri').checked,
+                confess: document.getElementById('note-confess').value,
+                remarks: document.getElementById('note-remarks').value
+            };
+            
+            const idx = students.findIndex(s => s.id == currentUser.id);
+            students[idx].submissions.push(note);
+            saveData();
+            playSound('success');
+            logActivity(`قام الطالب ${currentUser.name} بإرسال نوتة روحية`);
+            showToast('تم حفظ النوتة الروحية بنجاح');
+            
+            // Reset form
+            document.querySelectorAll('#student-dash input[type="checkbox"]').forEach(c => c.checked = false);
+            document.getElementById('note-remarks').value = '';
+        }
+
+
+        // --- REPORTS ---
+        function preparePrint(type, autoPrint = true) {
+            if(autoPrint) playSound('click');
+            const date = new Date().toLocaleDateString('ar-EG');
+            document.getElementById('p-date').innerText = `التاريخ: ${date}`;
+            document.getElementById('p-day').innerText = `اليوم: ${new Date().toLocaleDateString('ar-EG', {weekday:'long'})}`;
+            
+            let html = `<table><thead><tr>`;
+            if(type === 'attendance') {
+                document.getElementById('p-title').innerText = 'تقرير الحضور والغياب';
+                html += `<th>م</th><th>الاسم</th><th>ID</th><th>عدد الحضور</th><th>عدد الغياب</th><th>نسبة الغياب</th></tr></thead><tbody>`;
+                students.filter(s=>s.status==='active').forEach((s, i) => {
+                    const abs = TOTAL_LECTURES - s.attendance.length;
+                    const pct = Math.round((abs/TOTAL_LECTURES)*100);
+                    html += `<tr><td>${i+1}</td><td>${s.name}</td><td>${s.id}</td><td>${s.attendance.length}</td><td>${Math.max(0, abs)}</td><td>${pct}%</td></tr>`;
+                });
+            } else {
+                document.getElementById('p-title').innerText = 'كشف الدرجات الشامل';
+                html += `<th>م</th><th>الاسم</th><th>ID</th><th>حضور (60)</th><th>أعمال (25)</th><th>امتحان (15)</th><th>النهائي %</th></tr></thead><tbody>`;
+                students.filter(s=>s.status==='active').forEach((s, i) => {
+                    const att = Math.round((s.attendance.length / TOTAL_LECTURES) * 60);
+                    const work = Math.round(Math.min(25, (s.submissions.length / 10) * 25));
+                    const exam = Math.round((s.examScore / 100) * 15);
+                    const final = att + work + exam;
+                    html += `<tr><td>${i+1}</td><td>${s.name}</td><td>${s.id}</td><td>${att}</td><td>${work}</td><td>${exam}</td><td><b>${final}</b></td></tr>`;
+                });
+            }
+            html += `</tbody></table>`;
+            document.getElementById('p-content').innerHTML = html;
+            if(autoPrint) window.print();
+        }
+
+        function exportExcel() {
+            playSound('click');
+            const data = students.filter(s=>s.status==='active').map(s => ({
+                "الاسم": s.name,
+                "ID": s.id,
+                "User": s.username,
+                "عدد الحضور": s.attendance.length,
+                "درجة الحضور (60)": Math.round((s.attendance.length / TOTAL_LECTURES) * 60),
+                "درجة الأعمال (25)": Math.round(Math.min(25, (s.submissions.length / 10) * 25)),
+                "درجة الامتحان (15)": Math.round((s.examScore / 100) * 15),
+                "الدرجة النهائية": calculateGrade(s)
+            }));
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "التقرير الشامل");
+            XLSX.writeFile(wb, "Servants_Report.xlsx");
+            showToast('تم تحميل ملف Excel بنجاح');
+        }
+
+        function exportPDF() {
+            playSound('click');
+            const el = document.getElementById('print-area');
+            // Populate print area first
+            preparePrint('grades', false); 
+            
+            document.getElementById('p-title').innerText = 'تقرير شامل (PDF)';
+            
+            const opt = {
+                margin: 0.5,
+                filename: 'Servants_Report.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            
+            el.style.display = 'block';
+            showToast('جاري إنشاء ملف PDF...', 'info');
+            html2pdf().set(opt).from(el).save().then(() => {
+                el.style.display = 'none';
+                showToast('تم تحميل PDF بنجاح');
+            });
+        }
+
+        // --- UTILS ---
+        function saveData() {
+            localStorage.setItem('sys_students', JSON.stringify(students));
+            localStorage.setItem('sys_homeworks', JSON.stringify(homeworks));
+            localStorage.setItem('sys_logs', JSON.stringify(activityLog));
+        }
+
+        window.onload = function() {
+            // Data is loaded in declarations
+        };
+    </script>
+</body>
+</html>
